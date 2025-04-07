@@ -14,9 +14,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Riot API Configuration
-const RIOT_API_KEY = process.env.RIOT_API_KEY;
-const BASE_URL = 'https://kr.api.riotgames.com/lol';
+// Cache for champion data
+let championData = null;
 
 // Routes
 app.get('/', (req, res) => {
@@ -26,7 +25,8 @@ app.get('/', (req, res) => {
 // Get champion list
 app.get('/api/champions', async (req, res) => {
     try {
-        const response = await axios.get(`https://ddragon.leagueoflegends.com/cdn/13.24.1/data/ko_KR/champion.json`);
+        const response = await axios.get('https://ddragon.leagueoflegends.com/cdn/13.24.1/data/ko_KR/champion.json');
+        championData = response.data.data; // Cache the champion data
         res.json(response.data);
     } catch (error) {
         console.error('Error fetching champions:', error);
@@ -43,21 +43,6 @@ app.get('/api/champions/:championId', async (req, res) => {
     } catch (error) {
         console.error('Error fetching champion details:', error);
         res.status(500).json({ error: 'Failed to fetch champion details' });
-    }
-});
-
-// Get champion mastery
-app.get('/api/summoner/:summonerName/mastery', async (req, res) => {
-    try {
-        const { summonerName } = req.params;
-        const summonerResponse = await axios.get(`${BASE_URL}/summoner/v4/summoners/by-name/${summonerName}?api_key=${RIOT_API_KEY}`);
-        const summonerId = summonerResponse.data.id;
-        
-        const masteryResponse = await axios.get(`${BASE_URL}/champion-mastery/v4/champion-masteries/by-summoner/${summonerId}?api_key=${RIOT_API_KEY}`);
-        res.json(masteryResponse.data);
-    } catch (error) {
-        console.error('Error fetching champion mastery:', error);
-        res.status(500).json({ error: 'Failed to fetch champion mastery' });
     }
 });
 

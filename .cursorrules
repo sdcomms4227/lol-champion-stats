@@ -1,0 +1,65 @@
+{
+    "rules": {
+        "indentation": {
+            "type": "spaces",
+            "size": 4
+        },
+        "lineLength": {
+            "max": 100
+        },
+        "quotes": {
+            "type": "single"
+        },
+        "semicolons": {
+            "required": true
+        },
+        "trailingWhitespace": {
+            "disallow": true
+        },
+        "newlineAtEndOfFile": {
+            "required": true
+        },
+        "fileEncoding": {
+            "type": "utf-8"
+        },
+        "lineEndings": {
+            "type": "lf"
+        }
+    },
+    "ignore": [
+        "node_modules",
+        ".git",
+        "dist",
+        "build",
+        "*.min.js",
+        "*.min.css"
+    ],
+    "extensions": {
+        "javascript": {
+            "extensions": [".js"],
+            "rules": {
+                "semicolons": true,
+                "quotes": "single",
+                "indentation": 4
+            }
+        },
+        "html": {
+            "extensions": [".html", ".ejs"],
+            "rules": {
+                "indentation": 4,
+                "selfClosingTags": true
+            }
+        },
+        "css": {
+            "extensions": [".css"],
+            "rules": {
+                "indentation": 4,
+                "spaceAfterColon": true,
+                "spaceBeforeBrace": true
+            }
+        }
+    },
+    "docs": {
+        "url" : "https://developer.riotgames.com/apis"
+    }
+} 

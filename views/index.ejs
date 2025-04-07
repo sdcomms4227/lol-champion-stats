@@ -1,41 +1,35 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang='ko'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>League of Legends Champion Statistics</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>League of Legends Champion Stats</title>
+    <link rel='stylesheet' href='/css/style.css'>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">LoL Champion Stats</a>
+    <div class='container'>
+        <h1>League of Legends Champion Stats</h1>
+        
+        <div class='search-section'>
+            <h2>챔피언 검색</h2>
+            <div class='search-box'>
+                <input type='text' id='championSearch' placeholder='챔피언 이름을 입력하세요'>
+            </div>
         </div>
-    </nav>
 
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>챔피언 목록</h2>
-                <div class="champion-grid" id="championList">
-                    <!-- Champion cards will be loaded here -->
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h2>소환사 검색</h2>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="summonerName" placeholder="소환사 이름">
-                    <button class="btn btn-primary" onclick="searchSummoner()">검색</button>
-                </div>
-                <div id="summonerStats">
-                    <!-- Summoner stats will be loaded here -->
-                </div>
-            </div>
+        <div class='champion-section'>
+            <h2>챔피언 목록</h2>
+            <div class='champion-grid' id='championGrid'></div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/main.js"></script>
+    <div id='championModal' class='modal'>
+        <div class='modal-content'>
+            <span class='close'>&times;</span>
+            <div id='championDetails'></div>
+        </div>
+    </div>
+
+    <script src='/js/main.js'></script>
 </body>
 </html> 

@@ -1,29 +1,52 @@
-// Load champions when page loads
-document.addEventListener('DOMContentLoaded', loadChampions);
+let champions = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadChampions();
+    setupChampionSearch();
+});
 
 async function loadChampions() {
     try {
         const response = await fetch('/api/champions');
         const data = await response.json();
-        displayChampions(data.data);
+        champions = data.data;
+        displayChampions(Object.values(champions));
     } catch (error) {
         console.error('Error loading champions:', error);
     }
 }
 
-function displayChampions(champions) {
-    const championList = document.getElementById('championList');
-    championList.innerHTML = '';
+function setupChampionSearch() {
+    const searchInput = document.getElementById('championSearch');
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredChampions = Object.values(champions).filter(champion => 
+            champion.name.toLowerCase().includes(searchTerm) || 
+            champion.id.toLowerCase().includes(searchTerm)
+        );
+        displayChampions(filteredChampions);
+    });
+}
 
-    Object.values(champions).forEach(champion => {
-        const championCard = document.createElement('div');
-        championCard.className = 'champion-card';
-        championCard.innerHTML = `
-            <img src="https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/${champion.id}.png" alt="${champion.name}">
-            <h3>${champion.name}</h3>
-        `;
-        championCard.addEventListener('click', () => showChampionDetails(champion.id));
-        championList.appendChild(championCard);
+function displayChampions(championList) {
+    const grid = document.getElementById('championGrid');
+    grid.innerHTML = '';
+    
+    championList.forEach(champion => {
+        const card = document.createElement('div');
+        card.className = 'champion-card';
+        card.onclick = () => showChampionDetails(champion.id);
+        
+        const img = document.createElement('img');
+        img.src = `https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/${champion.image.full}`;
+        img.alt = champion.name;
+        
+        const name = document.createElement('h3');
+        name.textContent = champion.name;
+        
+        card.appendChild(img);
+        card.appendChild(name);
+        grid.appendChild(card);
     });
 }
 
@@ -31,63 +54,44 @@ async function showChampionDetails(championId) {
     try {
         const response = await fetch(`/api/champions/${championId}`);
         const data = await response.json();
-        // Display champion details in a modal or separate section
-        console.log('Champion details:', data);
-    } catch (error) {
-        console.error('Error loading champion details:', error);
-    }
-}
-
-async function searchSummoner() {
-    const summonerName = document.getElementById('summonerName').value;
-    if (!summonerName) return;
-
-    try {
-        const response = await fetch(`/api/summoner/${summonerName}/mastery`);
-        const data = await response.json();
-        displaySummonerStats(data);
-    } catch (error) {
-        console.error('Error searching summoner:', error);
-        document.getElementById('summonerStats').innerHTML = `
-            <div class="alert alert-danger">
-                소환사를 찾을 수 없습니다.
+        const champion = data.data[championId];
+        
+        const modal = document.getElementById('championModal');
+        const detailsDiv = document.getElementById('championDetails');
+        
+        detailsDiv.innerHTML = `
+            <div class='champion-header'>
+                <img src='https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/${champion.image.full}' 
+                     alt='${champion.name}'>
+                <h2>${champion.name}</h2>
+                <p class='champion-title'>${champion.title}</p>
             </div>
-        `;
-    }
-}
-
-function displaySummonerStats(masteryData) {
-    const summonerStats = document.getElementById('summonerStats');
-    summonerStats.innerHTML = '';
-
-    masteryData.slice(0, 10).forEach(mastery => {
-        const masteryCard = document.createElement('div');
-        masteryCard.className = 'mastery-card';
-        masteryCard.innerHTML = `
-            <div class="mastery-info">
-                <img src="https://ddragon.leagueoflegends.com/cdn/13.24.1/img/champion/${getChampionId(mastery.championId)}.png" alt="Champion">
-                <div class="mastery-details">
-                    <h4>${getChampionName(mastery.championId)}</h4>
-                    <p>숙련도 레벨: ${mastery.championLevel}</p>
-                    <p>숙련도 점수: ${mastery.championPoints.toLocaleString()}</p>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: ${(mastery.championPoints / 100000) * 100}%"></div>
-                    </div>
+            <div class='champion-info'>
+                <h3>챔피언 정보</h3>
+                <p>${champion.lore}</p>
+                <div class='champion-stats'>
+                    <h3>기본 능력치</h3>
+                    <ul>
+                        <li>체력: ${champion.stats.hp} (+${champion.stats.hpperlevel}/레벨)</li>
+                        <li>공격력: ${champion.stats.attackdamage} (+${champion.stats.attackdamageperlevel}/레벨)</li>
+                        <li>방어력: ${champion.stats.armor} (+${champion.stats.armorperlevel}/레벨)</li>
+                        <li>마법 저항력: ${champion.stats.spellblock} (+${champion.stats.spellblockperlevel}/레벨)</li>
+                    </ul>
                 </div>
             </div>
         `;
-        summonerStats.appendChild(masteryCard);
-    });
-}
-
-// Helper functions to get champion names and IDs
-// Note: In a real application, you would want to maintain a mapping of champion IDs to names
-function getChampionName(championId) {
-    // This is a placeholder - you would need to implement proper champion ID to name mapping
-    return `Champion ${championId}`;
-}
-
-function getChampionId(championId) {
-    // This is a placeholder - you would need to implement proper champion ID mapping
-    return championId;
+        
+        modal.style.display = 'block';
+        
+        const closeBtn = modal.querySelector('.close');
+        closeBtn.onclick = () => modal.style.display = 'none';
+        
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    } catch (error) {
+        console.error('Error loading champion details:', error);
+    }
 } 
