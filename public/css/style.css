@@ -1,0 +1,61 @@
+.champion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.champion-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.champion-card:hover {
+    transform: scale(1.05);
+}
+
+.champion-card img {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.champion-card h3 {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+#summonerStats {
+    margin-top: 1rem;
+}
+
+.mastery-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mastery-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    margin-right: 1rem;
+}
+
+.mastery-info {
+    display: flex;
+    align-items: center;
+}
+
+.mastery-details {
+    flex-grow: 1;
+}
+
+.progress {
+    height: 0.5rem;
+    margin-top: 0.5rem;
+} 
