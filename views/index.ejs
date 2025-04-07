@@ -7,20 +7,40 @@
     <link rel='stylesheet' href='/css/style.css'>
 </head>
 <body>
-    <div class='container'>
-        <h1>League of Legends Champion Stats</h1>
-        
-        <div class='search-section'>
-            <h2>챔피언 검색</h2>
-            <div class='search-box'>
-                <input type='text' id='championSearch' placeholder='챔피언 이름을 입력하세요'>
-            </div>
-        </div>
+    <div class='app-container'>
+        <header>
+            <h1>League of Legends</h1>
+            <h2>Champion Stats</h2>
+        </header>
 
-        <div class='champion-section'>
-            <h2>챔피언 목록</h2>
-            <div class='champion-grid' id='championGrid'></div>
-        </div>
+        <main>
+            <section class='search-section'>
+                <h3>Champion Search</h3>
+                <div class='search-box'>
+                    <svg class='search-icon' viewBox='0 0 24 24'>
+                        <path d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/>
+                    </svg>
+                    <input type='text' id='championSearch' placeholder='Search for a champion...'>
+                </div>
+            </section>
+
+            <section class='roles-section'>
+                <h3>Champion Roles</h3>
+                <div class='role-filters'>
+                    <button class='role-btn active' data-role='All'>All</button>
+                    <button class='role-btn' data-role='Assassin'>Assassin</button>
+                    <button class='role-btn' data-role='Fighter'>Fighter</button>
+                    <button class='role-btn' data-role='Mage'>Mage</button>
+                    <button class='role-btn' data-role='Marksman'>Marksman</button>
+                    <button class='role-btn' data-role='Support'>Support</button>
+                    <button class='role-btn' data-role='Tank'>Tank</button>
+                </div>
+            </section>
+
+            <section class='champions-section'>
+                <div class='champion-grid' id='championGrid'></div>
+            </section>
+        </main>
     </div>
 
     <div id='championModal' class='modal'>

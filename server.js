@@ -26,8 +26,29 @@ app.get('/', (req, res) => {
 app.get('/api/champions', async (req, res) => {
     try {
         const response = await axios.get('https://ddragon.leagueoflegends.com/cdn/13.24.1/data/ko_KR/champion.json');
-        championData = response.data.data; // Cache the champion data
-        res.json(response.data);
+        championData = response.data.data;
+        
+        // Transform data to match v0 structure
+        const transformedData = Object.entries(championData).map(([id, data]) => ({
+            id,
+            key: data.key,
+            name: data.name,
+            title: data.title,
+            blurb: data.blurb,
+            info: data.info,
+            tags: data.tags,
+            image: {
+                full: data.image.full,
+                sprite: data.image.sprite,
+                group: data.image.group,
+                x: data.image.x,
+                y: data.image.y,
+                w: data.image.w,
+                h: data.image.h
+            }
+        }));
+        
+        res.json(transformedData);
     } catch (error) {
         console.error('Error fetching champions:', error);
         res.status(500).json({ error: 'Failed to fetch champions' });
@@ -39,7 +60,61 @@ app.get('/api/champions/:championId', async (req, res) => {
     try {
         const { championId } = req.params;
         const response = await axios.get(`https://ddragon.leagueoflegends.com/cdn/13.24.1/data/ko_KR/champion/${championId}.json`);
-        res.json(response.data);
+        const champion = response.data.data[championId];
+        
+        // Transform data to match v0 structure
+        const transformedData = {
+            id: champion.id,
+            key: champion.key,
+            name: champion.name,
+            title: champion.title,
+            lore: champion.lore,
+            blurb: champion.blurb,
+            info: champion.info,
+            tags: champion.tags,
+            image: {
+                full: champion.image.full,
+                sprite: champion.image.sprite,
+                group: champion.image.group,
+                x: champion.image.x,
+                y: champion.image.y,
+                w: champion.image.w,
+                h: champion.image.h
+            },
+            stats: champion.stats,
+            spells: champion.spells.map(spell => ({
+                id: spell.id,
+                name: spell.name,
+                description: spell.description,
+                tooltip: spell.tooltip,
+                cooldown: spell.cooldown,
+                cost: spell.cost,
+                image: {
+                    full: spell.image.full,
+                    sprite: spell.image.sprite,
+                    group: spell.image.group,
+                    x: spell.image.x,
+                    y: spell.image.y,
+                    w: spell.image.w,
+                    h: spell.image.h
+                }
+            })),
+            passive: {
+                name: champion.passive.name,
+                description: champion.passive.description,
+                image: {
+                    full: champion.passive.image.full,
+                    sprite: champion.passive.image.sprite,
+                    group: champion.passive.image.group,
+                    x: champion.passive.image.x,
+                    y: champion.passive.image.y,
+                    w: champion.passive.w,
+                    h: champion.passive.h
+                }
+            }
+        };
+        
+        res.json(transformedData);
     } catch (error) {
         console.error('Error fetching champion details:', error);
         res.status(500).json({ error: 'Failed to fetch champion details' });
