@@ -10,7 +10,13 @@ async function loadChampions() {
         const response = await fetch('/api/champions');
         const data = await response.json();
         champions = data.data;
-        displayChampions(Object.values(champions));
+        
+        // Convert champions object to array and sort by Korean name
+        const sortedChampions = Object.values(champions).sort((a, b) => {
+            return a.name.localeCompare(b.name, 'ko');
+        });
+        
+        displayChampions(sortedChampions);
     } catch (error) {
         console.error('Error loading champions:', error);
     }
@@ -77,6 +83,29 @@ async function showChampionDetails(championId) {
                         <li>방어력: ${champion.stats.armor} (+${champion.stats.armorperlevel}/레벨)</li>
                         <li>마법 저항력: ${champion.stats.spellblock} (+${champion.stats.spellblockperlevel}/레벨)</li>
                     </ul>
+                </div>
+                <div class='champion-skills'>
+                    <h3>스킬 정보</h3>
+                    <div class='passive-skill'>
+                        <h4>패시브 - ${champion.passive.name}</h4>
+                        <img src='https://ddragon.leagueoflegends.com/cdn/13.24.1/img/passive/${champion.passive.image.full}' 
+                             alt='${champion.passive.name}'>
+                        <p>${champion.passive.description}</p>
+                    </div>
+                    <div class='active-skills'>
+                        ${champion.spells.map((spell, index) => `
+                            <div class='skill'>
+                                <h4>${['Q', 'W', 'E', 'R'][index]} - ${spell.name}</h4>
+                                <img src='https://ddragon.leagueoflegends.com/cdn/13.24.1/img/spell/${spell.image.full}' 
+                                     alt='${spell.name}'>
+                                <p>${spell.description}</p>
+                                <div class='skill-details'>
+                                    ${spell.cooldown ? `<p>쿨다운: ${spell.cooldown.join('/')}초</p>` : ''}
+                                    ${spell.cost ? `<p>소모값: ${spell.cost.join('/')}</p>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             </div>
         `;

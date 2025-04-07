@@ -58,15 +58,15 @@ h2 {
 /* Champion Grid */
 .champion-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
     padding: 20px;
 }
 
 .champion-card {
     background-color: #fff;
     border-radius: 8px;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -79,15 +79,19 @@ h2 {
 }
 
 .champion-card img {
-    width: 100%;
+    width: 50%;
+    height: auto;
     border-radius: 4px;
     margin-bottom: 10px;
 }
 
 .champion-card h3 {
+    font-size: 0.67rem;
     margin: 0;
-    font-size: 14px;
     color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Modal */
@@ -250,53 +254,120 @@ h2 {
 
 /* Champion Skills */
 .champion-skills {
-    margin-top: 30px;
-}
-
-.champion-skills h4 {
-    margin-bottom: 15px;
-    color: #2c3e50;
-}
-
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.skill-item {
-    background-color: #f8f9fa;
-    padding: 15px;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.05);
     border-radius: 8px;
-    display: flex;
-    gap: 15px;
 }
 
-.skill-item img {
-    width: 50px;
-    height: 50px;
-    border-radius: 4px;
+.champion-skills h3 {
+    margin-bottom: 1.5rem;
+    color: #1a1a1a;
+    font-size: 1.5rem;
 }
 
-.skill-info h5 {
-    margin: 0 0 5px 0;
-    color: #2c3e50;
+.active-skills {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
 }
 
-.skill-info p {
+.passive-skill, .skill {
+    background-color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0.5rem 1rem;
+}
+
+.passive-skill img, .skill img {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    border: 2px solid #c9aa71;
+    grid-row: 1 / span 3;
+    align-self: start;
+}
+
+.passive-skill h4, .skill h4 {
+    color: #c9aa71;
     margin: 0;
-    color: #666;
-    font-size: 14px;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    grid-column: 2;
+    grid-row: 1;
 }
 
-/* Responsive Design */
+.skill-description {
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.skill-details {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.skill-details p {
+    margin: 0;
+}
+
+@media (max-width: 1200px) {
+    .champion-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .champion-grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
     }
     
     .modal-content {
         margin: 20% auto;
         width: 90%;
+    }
+
+    .passive-skill, .skill {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        text-align: center;
+    }
+
+    .passive-skill img, .skill img {
+        grid-row: 1;
+        grid-column: 1;
+        justify-self: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .passive-skill h4, .skill h4 {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .skill-description {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    .skill-details {
+        grid-column: 1;
+        grid-row: 4;
     }
 } 
